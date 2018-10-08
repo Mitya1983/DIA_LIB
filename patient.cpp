@@ -155,9 +155,10 @@ Pump *Patient::getPump()
     return pump.get();
 }
 
-void Patient::setDoctor(const Doctor &arg_doctor)
+void Patient::setDoctor(const QString &arg_name, const QString &arg_surname, const QString &arg_workPhone, const QString &arg_cellPhone, 
+                        const QString &arg_clinicName, const QString &arg_clinicAddress)
 {
-    doctor.reset(new Doctor (arg_doctor));
+        doctor.reset(new Doctor (arg_name, arg_surname, arg_workPhone, arg_cellPhone, arg_clinicName, arg_clinicAddress));
 }
 
 Doctor *Patient::getDoctor()

@@ -64,7 +64,8 @@ public:
     Q_INVOKABLE Insulin *getBolusInsulin();
     Q_INVOKABLE void setPump(const QString &arg_manufacturer, const QString &arg_model, const int &arg_volume);
     Q_INVOKABLE Pump *getPump();
-    Q_INVOKABLE void setDoctor(const Doctor &arg_doctor);
+    Q_INVOKABLE void setDoctor(const QString &arg_name, const QString &arg_surname, const QString &arg_workPhone = nullptr, const QString &arg_cellPhone = nullptr,
+                               const QString &arg_clinicName = nullptr, const QString &arg_clinicAddress = nullptr);
     Q_INVOKABLE Doctor *getDoctor();
     Q_INVOKABLE double getAverageDose() const;
     Q_INVOKABLE double getCorrectionFactor() const;
