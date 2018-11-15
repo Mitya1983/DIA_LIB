@@ -6,6 +6,7 @@
 
 class Trustee : public User
 {
+    Q_OBJECT
     QString cellPhone;
     QString workPhone;
     QString homePhone;
@@ -23,7 +24,6 @@ public:
     Q_INVOKABLE void setHomePhone(const QString &arg_homePhone);
     Q_INVOKABLE QString getHomePhone() const;
 
-    ~Trustee();
 };
 
 #endif // TRUSTEE_H

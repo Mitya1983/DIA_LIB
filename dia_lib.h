@@ -5,6 +5,12 @@
 #include "doctor.h"
 #include "trustee.h"
 #include "grange.h"
+#include "insulindose.h"
+#include "currentdose.h"
+#include "dailydose.h"
+#include "insulin.h"
+#include "patient.h"
+
 
 class Dia_Lib
 {

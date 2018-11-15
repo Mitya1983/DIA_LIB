@@ -23,8 +23,3 @@ QString User::getSurname() const
 {
     return surname;
 }
-
-User::~User()
-{
-
-}

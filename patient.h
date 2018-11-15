@@ -3,6 +3,7 @@
 
 #include <QDate>
 #include <QString>
+#include <QtDebug>
 #include <memory>
 #include "user.h"
 #include "grange.h"
@@ -23,22 +24,24 @@ private:
     int height;
     int weight;
     double massIndex;
-    //GRange range;
     std::unique_ptr<GRange> range;
     int breadUnit;
-    //Insulin basal;
+    bool isPump;
     std::unique_ptr<Insulin> basal;
-    //Insulin bolus;
     std::unique_ptr<Insulin> bolus;
-    //Pump pump;
     std::unique_ptr<Pump> pump;
     std::unique_ptr<Doctor> doctor;
-    //InsulinDose averageDose;
     std::unique_ptr<InsulinDose> averageDose;
     double correctionFactor;
     double cHORatio;
     double breadUnitRatio;
-    
+    double averageGlucoseLevel;
+private slots:
+    void setAge();
+    void setMassIndex();
+    void setCorrectionFactor();
+    void setCHORatio();
+    void setBreadUnitRatio();
 public:
     Patient();
     Patient(const QString &arg_name, const QString &arg_surname);
@@ -55,36 +58,38 @@ public:
     Q_INVOKABLE QString getWeight() const;
     Q_INVOKABLE QString getMassIndex() const;
     Q_INVOKABLE void setRange(const double &arg_lowerBound, const double &arg_upperBound);
-    Q_INVOKABLE GRange *getRange();
+    Q_INVOKABLE std::unique_ptr<GRange>& getRange();
+    //Q_INVOKABLE GRange* getRange();
     Q_INVOKABLE void setBreadUnit(const int &arg_BreadUnitValue);
     Q_INVOKABLE int getBreadUnit() const;
+    Q_INVOKABLE void setIsPump(bool arg);
+    Q_INVOKABLE bool checkPump() const;
     Q_INVOKABLE void setBasalInsulin(const QString &arg_name);
-    Q_INVOKABLE Insulin *getBasalInsulin();
+    std::unique_ptr<Insulin>& getBasalInsulin();
+    //Q_INVOKABLE Insulin *getBasalInsulin();
     Q_INVOKABLE void setBolusInsulin(const QString &arg_name, Insulin::InsulinTypes arg_type);
-    Q_INVOKABLE Insulin *getBolusInsulin();
+    Q_INVOKABLE std::unique_ptr<Insulin>& getBolusInsulin();
+    //Q_INVOKABLE Insulin *getBolusInsulin();
     Q_INVOKABLE void setPump(const QString &arg_manufacturer, const QString &arg_model, const int &arg_volume);
-    Q_INVOKABLE Pump *getPump();
+    Q_INVOKABLE std::unique_ptr<Pump>& getPump();
+    //Q_INVOKABLE Pump *getPump();
     Q_INVOKABLE void setDoctor(const QString &arg_name, const QString &arg_surname, const QString &arg_workPhone = nullptr, const QString &arg_cellPhone = nullptr,
                                const QString &arg_clinicName = nullptr, const QString &arg_clinicAddress = nullptr);
-    Q_INVOKABLE Doctor *getDoctor();
+    Q_INVOKABLE std::unique_ptr<Doctor>& getDoctor();
+    //Q_INVOKABLE Doctor *getDoctor();
     Q_INVOKABLE double getAverageDose() const;
     Q_INVOKABLE double getCorrectionFactor() const;
     Q_INVOKABLE double getCHORatio() const;
     Q_INVOKABLE double getBreadUnitRatio() const;
-    
-    ~Patient();
+    Q_INVOKABLE QString getAverageGlucoseLevel() const;
     
 signals:
     void on_birthDateChanged();
     void on_weightValueChanged();
     void on_cHORationValueChanged();
 public slots:
-    void setAge();
-    void setMassIndex();
     void setAverageDose(const double &arg_dose);
-    void setCorrectionFactor();
-    void setCHORatio();
-    void setBreadUnitRatio();
+    void setAverageGlucoseLevel(const double &arg_level);
 };
 
 #endif // PATIENT_H

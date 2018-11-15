@@ -26,14 +26,26 @@ SOURCES += \
     user.cpp \
     doctor.cpp \
     trustee.cpp \
-    grange.cpp
+    grange.cpp \
+    insulindose.cpp \
+    currentdose.cpp \
+    dailydose.cpp \
+    insulin.cpp \
+    pump.cpp \
+    patient.cpp
 
 HEADERS += \
 	dia_lib.h \
     user.h \
     doctor.h \
     trustee.h \
-    grange.h
+    grange.h \
+    insulindose.h \
+    currentdose.h \
+    dailydose.h \
+    insulin.h \
+    pump.h \
+    patient.h
 
 unix {
     target.path = /usr/lib

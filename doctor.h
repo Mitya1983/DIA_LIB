@@ -6,6 +6,7 @@
 #include <map>
 class Doctor : public User
 {
+    Q_OBJECT
     QString workPhone;
     QString cellPhone;
     QString clinicName;
@@ -19,7 +20,8 @@ public:
             const QString &arg_clinicName);
     Doctor(const QString &arg_name, const QString &arg_surname, const QString &arg_workPhone, const QString &arg_cellPhone,
             const QString &arg_clinicName, const QString &arg_clinicAddress);
-
+    //Doctor(const Doctor &arg_doctor);
+    
     Q_INVOKABLE void setWorkPhone(const QString &arg_workPhone);
     Q_INVOKABLE QString getWorkPhone() const;
     Q_INVOKABLE void setCellPhone(const QString &arg_cellPhone);
@@ -28,8 +30,9 @@ public:
     Q_INVOKABLE QString getClinicName() const;
     Q_INVOKABLE void setClinicAddress(const QString &arg_clinicAddress);
     Q_INVOKABLE QString getClinicAddress() const;
+    Q_INVOKABLE std::map<QString/*Days*/, QString/*Working hours from-to*/> getWorkingSchedule();
 
-    ~Doctor();
+    ~Doctor() = default;
 };
 
 #endif // DOCTOR_H

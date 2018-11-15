@@ -1,13 +1,16 @@
 #include "grange.h"
+#include <stdexcept>
 
-GRange::GRange(QObject *parent) : QObject(parent){}
-
-GRange::GRange(const double &arg_lowerBound, const double &arg_upperbound, QObject *parent) : 
-                QObject(parent), lowerBound(arg_lowerBound), upperbound(arg_upperbound)
+GRange::GRange(QObject *parent) : QObject(parent)
 {
-//    setLowerBorderValue(lowerBound);
-//    setUpperBorderValue(upperbound);
-//    setNormalSurplus(upperbound);
+    connect(this, &GRange::on_lowerBoundValueChanged, this, &GRange::setLowerBorderValue);
+    connect(this, &GRange::on_upperBoundValueChanged, this, &GRange::setUpperBorderValue);
+    connect(this, &GRange::on_upperBoundValueChanged, this, &GRange::setNormalSurplus);
+}
+
+GRange::GRange(const double &arg_lowerBound, const double &arg_upperBound, QObject *parent) : 
+                QObject(parent), lowerBound(arg_lowerBound), upperbound(arg_upperBound)
+{
     connect(this, &GRange::on_lowerBoundValueChanged, this, &GRange::setLowerBorderValue);
     connect(this, &GRange::on_upperBoundValueChanged, this, &GRange::setUpperBorderValue);
     connect(this, &GRange::on_upperBoundValueChanged, this, &GRange::setNormalSurplus);
@@ -17,8 +20,13 @@ GRange::GRange(const double &arg_lowerBound, const double &arg_upperbound, QObje
 
 void GRange::setLowerBound(const double &arg_lowerBound)
 {
-    lowerBound = arg_lowerBound;
-    emit on_lowerBoundValueChanged(lowerBound);
+//    if ((static_cast<int>(upperbound) != 0) && (arg_lowerBound > upperbound))
+//        throw std::invalid_argument("lowerBound can't be bigger then upperBound");
+//    else
+//    {
+        lowerBound = arg_lowerBound;
+        emit on_lowerBoundValueChanged(lowerBound);
+//    }   
 }
 
 double GRange::getLowerBound() const
@@ -26,9 +34,9 @@ double GRange::getLowerBound() const
     return lowerBound;
 }
 
-void GRange::setUpperBound(const double &arg_upperbound)
+void GRange::setUpperBound(const double &arg_upperBound)
 {
-    upperbound = arg_upperbound;
+    upperbound = arg_upperBound;
     emit on_upperBoundValueChanged(upperbound);
 }
 
@@ -64,5 +72,5 @@ void GRange::setUpperBorderValue(const double &arg_upperBound)
 
 void GRange::setNormalSurplus(const double &arg_upperBound)
 {
-    normalSurplus = arg_upperBound + 3;
+    normalSurplus = arg_upperBound + 2;
 }

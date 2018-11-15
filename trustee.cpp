@@ -42,7 +42,3 @@ QString Trustee::getHomePhone() const
     return homePhone;
 }
 
-Trustee::~Trustee()
-{
-
-}

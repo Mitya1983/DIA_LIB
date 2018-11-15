@@ -15,9 +15,9 @@ Patient::Patient()
 
 Patient::Patient(const QString &arg_name, const QString &arg_surname) : User(arg_name, arg_surname) 
 {
-    range = std::unique_ptr<GRange>(new GRange ());
-    bolus = std::unique_ptr<Insulin>(new Insulin());
-    averageDose = std::unique_ptr<InsulinDose>(new InsulinDose());
+    range = std::make_unique<GRange>();
+    bolus = std::make_unique<Insulin>();
+    averageDose = std::make_unique<InsulinDose>();
     connect(this, &Patient::on_birthDateChanged, this, &Patient::setAge);
     connect(this, &Patient::on_weightValueChanged, this, &Patient::setMassIndex);
     connect(averageDose.get(), &InsulinDose::on_doseValueChanged, this, &Patient::setCorrectionFactor);
@@ -101,15 +101,24 @@ QString Patient::getMassIndex() const
 
 void Patient::setRange(const double &arg_lowerBound, const double &arg_upperBound)
 {
-    
+//    try {
+//        range->setLowerBound(arg_lowerBound);
+//    } catch (std::invalid_argument &arg) {
+//        qDebug() << arg.what();
+//    }
     range->setLowerBound(arg_lowerBound); 
     range->setUpperBound(arg_upperBound);
 }
 
-GRange *Patient::getRange()
+std::unique_ptr<GRange>& Patient::getRange()
 {
-    return  range.get();
+    return range;
 }
+
+//GRange *Patient::getRange()
+//{
+//    return  range.get();
+//}
 
 void Patient::setBreadUnit(const int &arg_BreadUnitValue)
 {
@@ -121,15 +130,30 @@ int Patient::getBreadUnit() const
     return breadUnit;
 }
 
-void Patient::setBasalInsulin(const QString &arg_name)
+void Patient::setIsPump(bool arg)
 {
-    basal = std::unique_ptr<Insulin>(new Insulin (arg_name));
+    isPump = arg;
 }
 
-Insulin *Patient::getBasalInsulin()
+bool Patient::checkPump() const
 {
-    return basal.get();
+    return isPump;
 }
+
+void Patient::setBasalInsulin(const QString &arg_name)
+{
+    basal = std::make_unique<Insulin>(arg_name);
+}
+
+std::unique_ptr<Insulin> &Patient::getBasalInsulin()
+{
+    return basal;
+}
+
+//Insulin *Patient::getBasalInsulin()
+//{
+//    return basal.get();
+//}
 
 void Patient::setBolusInsulin(const QString &arg_name, Insulin::InsulinTypes arg_type)
 {
@@ -137,38 +161,51 @@ void Patient::setBolusInsulin(const QString &arg_name, Insulin::InsulinTypes arg
     bolus->setType(arg_type);
 }
 
-Insulin *Patient::getBolusInsulin()
+std::unique_ptr<Insulin> &Patient::getBolusInsulin()
 {
-    return bolus.get();
+    return bolus;
 }
+
+//Insulin *Patient::getBolusInsulin()
+//{
+//    return bolus.get();
+//}
 
 void Patient::setPump(const QString &arg_manufacturer, const QString &arg_model, const int &arg_volume)
 {
-//    pump.setManufacturer(arg_manufacturer);
-//    pump.setModel(arg_model);
-//    pump.setVolume(arg_volume);
-    pump = std::unique_ptr<Pump>(new Pump(arg_manufacturer, arg_model, arg_volume));
+    pump = std::make_unique<Pump>(arg_manufacturer, arg_model, arg_volume);
 }
 
-Pump *Patient::getPump()
+std::unique_ptr<Pump> &Patient::getPump()
 {
-    return pump.get();
+    return pump;
 }
+
+//Pump *Patient::getPump()
+//{
+//    return pump.get();
+//}
 
 void Patient::setDoctor(const QString &arg_name, const QString &arg_surname, const QString &arg_workPhone, const QString &arg_cellPhone, 
                         const QString &arg_clinicName, const QString &arg_clinicAddress)
 {
-        doctor.reset(new Doctor (arg_name, arg_surname, arg_workPhone, arg_cellPhone, arg_clinicName, arg_clinicAddress));
+    //doctor.reset(new Doctor (arg_name, arg_surname, arg_workPhone, arg_cellPhone, arg_clinicName, arg_clinicAddress));
+    doctor = std::make_unique<Doctor>(arg_name, arg_surname, arg_workPhone, arg_cellPhone, arg_clinicName, arg_clinicAddress);
 }
 
-Doctor *Patient::getDoctor()
+std::unique_ptr<Doctor> &Patient::getDoctor()
 {
-    return doctor.get();
+    return doctor;
 }
+
+//Doctor *Patient::getDoctor()
+//{
+//    return doctor.get();
+//}
 
 double Patient::getAverageDose() const
 {
-    return averageDose.get()->getDose();
+    return averageDose->getDose();
 }
 
 double Patient::getCorrectionFactor() const
@@ -186,14 +223,15 @@ double Patient::getBreadUnitRatio() const
     return breadUnitRatio;
 }
 
-Patient::~Patient()
+QString Patient::getAverageGlucoseLevel() const
 {
-    
+    QString data = QString::number(averageGlucoseLevel);
+    return data;
 }
 
 void Patient::setAge()
 {
-    if (QDate::currentDate().month() < birthdate.month() && QDate::currentDate().day() < birthdate.day())
+    if (QDate::currentDate().month() <= birthdate.month() && QDate::currentDate().day() < birthdate.day())
         age = QDate::currentDate().year() - (birthdate.year() + 1);
     else /*(QDate::currentDate().day() >= birthdate.day())*/
         age = QDate::currentDate().year() - birthdate.year();
@@ -233,4 +271,9 @@ void Patient::setCHORatio()
 void Patient::setBreadUnitRatio()
 {
     breadUnitRatio = static_cast<int>((breadUnit / cHORatio) * 10) / 10.00;
+}
+
+void Patient::setAverageGlucoseLevel(const double &arg_level)
+{
+    averageGlucoseLevel = arg_level;
 }
